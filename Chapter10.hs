@@ -1,4 +1,8 @@
+-- Haskell Chapter 10 Practical Tasks: Custom Type Classes and Instances
+-- ===========================================================
+
 -- HC10T1: ShowSimple Type Class
+---------------------------------------------------------------
 data PaymentMethod = Cash | CreditCard | Crypto deriving (Show)
 
 class ShowSimple a where
@@ -11,6 +15,7 @@ instance ShowSimple PaymentMethod where
 
 
 -- HC10T2: Summable Type Class
+---------------------------------------------------------------
 class Summable a where
     sumUp :: [a] -> a
 
@@ -19,7 +24,9 @@ instance Summable Int where
 
 
 -- HC10T3: Comparable Type Class
-data Blockchain = Bitcoin | Ethereum | Solana deriving (Show, Eq)
+---------------------------------------------------------------
+-- Note: do NOT derive Eq here because we'll provide a custom Eq instance later.
+data Blockchain = Bitcoin | Ethereum | Solana deriving (Show)
 
 class Comparable a where
     compareWith :: a -> a -> Ordering
@@ -35,6 +42,7 @@ instance Comparable Blockchain where
 
 
 -- HC10T4: Eq Instance for Box
+---------------------------------------------------------------
 data Box a = Box a deriving (Show)
 
 instance (Eq a) => Eq (Box a) where
@@ -42,17 +50,19 @@ instance (Eq a) => Eq (Box a) where
 
 
 -- HC10T5: ShowDetailed Type Class
+---------------------------------------------------------------
 data User = User { userId :: Int, userName :: String } deriving (Show)
 
 class ShowDetailed a where
     showDetailed :: a -> String
 
 instance ShowDetailed User where
-    showDetailed (User id name) =
-        "User ID: " ++ show id ++ ", Name: " ++ name
+    showDetailed (User i name) =
+        "User ID: " ++ show i ++ ", Name: " ++ name
 
 
 -- HC10T6: Mutual Recursion in Eq for Blockchain
+---------------------------------------------------------------
 instance Eq Blockchain where
     (==) a b = not (a /= b)
     (/=) a b = case (a, b) of
@@ -63,6 +73,7 @@ instance Eq Blockchain where
 
 
 -- HC10T7: Convertible Type Class
+---------------------------------------------------------------
 class Convertible a b where
     convert :: a -> b
 
@@ -73,6 +84,7 @@ instance Convertible PaymentMethod String where
 
 
 -- HC10T8: AdvancedEq Subclass of Eq
+---------------------------------------------------------------
 class Eq a => AdvancedEq a where
     compareEquality :: a -> a -> Bool
     compareEquality x y = x == y
@@ -81,6 +93,7 @@ instance AdvancedEq Int
 
 
 -- HC10T9: MinMax Type Class
+---------------------------------------------------------------
 class MinMax a where
     minValue :: a
     maxValue :: a
@@ -91,6 +104,7 @@ instance MinMax Int where
 
 
 -- HC10T10: Concatenatable Type Class
+---------------------------------------------------------------
 class Concatenatable a where
     concatWith :: a -> a -> a
 
@@ -98,6 +112,7 @@ instance Concatenatable String where
     concatWith a b = a ++ b
 
 
+-- ===========================================================
 -- MAIN FUNCTION TO TEST ALL IMPLEMENTATIONS
 ---------------------------------------------------------------
 main :: IO ()
@@ -138,3 +153,4 @@ main = do
 
     putStrLn "\n=== HC10T10: Concatenatable ==="
     print (concatWith "Hello, " "World!")
+
